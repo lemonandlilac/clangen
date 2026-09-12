@@ -1,8 +1,11 @@
 import pygame.mixer
 
+import pyttsx3
+
 from scripts.game_structure.audio.ambiance import Ambiance
 from scripts.game_structure.audio.music import Music
 from scripts.game_structure.audio.sound import Sound
+from scripts.game_structure.audio.tts import TTS
 from scripts.game_structure.game import game_setting_get
 
 
@@ -15,6 +18,7 @@ class AudioManager:
         self.ambiance = Ambiance()
         self.sound = Sound()
         self.music = Music()
+        self.tts = TTS()
         self.disabled = False
         self.muted = False
 

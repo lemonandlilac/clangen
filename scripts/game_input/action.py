@@ -13,5 +13,7 @@ class Action(Enum):
     NEXT = 10
     PREVIOUS = 11
 
+    SPEAK = 20
+
     DEBUG = 100
     SAVE = 101
