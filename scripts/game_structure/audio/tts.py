@@ -8,6 +8,7 @@ from pygame_gui.elements import UIButton, UILabel, UITextBox
 import pyttsx3
 
 from scripts.game_structure.game.settings import game_setting_get, game_setting_set
+from scripts.ui.elements.cat_button import CatButton
 
 logger = logging.getLogger(__name__)
 
@@ -80,11 +81,14 @@ class TTS:
         if self.engine is None or hovered_element is None:
             return
 
-        if isinstance(hovered_element, UIButton) or isinstance(hovered_element, UILabel):
-            # Call i18n to perform the translation, but this isn't perfect when the buttons
-            # are represented by icons or contain special characters. This would be resolved
-            # by alt text, but i18n makes this more complicated.
-            self.engine.say(i18n.t(hovered_element.text))
-        if isinstance(hovered_element, UITextBox):
-            # HACK: It's not ideal to extract the plaintext out of the text box like this.
-            self.engine.say(hovered_element.text_box_layout.plain_text)
+        # Call i18n to perform the translation, but this isn't perfect when the buttons
+        # are represented by icons or contain special characters. This would be resolved
+        # by alt text, but i18n makes this more complicated.
+        if isinstance(hovered_element, CatButton):
+            self.engine.say(i18n.t(hovered_element.cat_id))
+        elif isinstance(hovered_element, UIButton) or isinstance(hovered_element, UILabel):
+            self.engine.say(i18n.t(hovered_element.text, **hovered_element.text_kwargs))
+        elif isinstance(hovered_element, UITextBox):
+            parser.feed(hovered_element.html_text)
+            text = parser.flush_text()
+            self.engine.say(i18n.t(text, **hovered_element.text_kwargs))
