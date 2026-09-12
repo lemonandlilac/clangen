@@ -50,6 +50,7 @@ class KeyboardManager(InputManager):
         pygame.K_RETURN: Action.CONFIRM,
         pygame.K_LEFT: Action.LEFT,
         pygame.K_RIGHT: Action.RIGHT,
+        pygame.K_t: Action.SPEAK,
         pygame.K_q: Action.PREVIOUS,
         pygame.K_e: Action.NEXT,
         pygame.K_SPACE: Action.SAVE,
@@ -101,6 +102,7 @@ class ControllerManager(InputManager):
     action_map = {
         pygame.CONTROLLER_BUTTON_A: Action.CONFIRM,
         pygame.CONTROLLER_BUTTON_B: Action.BACK,
+        pygame.CONTROLLER_BUTTON_X: Action.SPEAK,
         pygame.CONTROLLER_BUTTON_DPAD_UP: Action.UP,
         pygame.CONTROLLER_BUTTON_DPAD_DOWN: Action.DOWN,
         pygame.CONTROLLER_BUTTON_DPAD_LEFT: Action.LEFT,
