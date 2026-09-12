@@ -30,7 +30,7 @@ parser = TTSParser()
 class TTS:
     def __init__(self):
         try:
-            self.engine: Optional[pyttsx3.Engine] = pyttsx3.init()
+            self.engine: Optional[pyttsx3.Engine] = pyttsx3.init(debug=True)
 
             # TODO: Use sound volume for now, but this could be its own setting.
             volume = game_setting_get("sound_volume") / 100
@@ -48,6 +48,9 @@ class TTS:
         if self.engine is None:
             return
 
+        if not self.engine._inLoop:
+            self.engine.startLoop()
+
         self.engine.isBusy()
 
     def say_next(self):
@@ -56,6 +59,9 @@ class TTS:
         """
         if self.engine is None:
             return
+
+        if not self.engine._inLoop:
+            self.engine.startLoop()
 
         self.engine.iterate()
 
@@ -77,18 +83,30 @@ class TTS:
     def handle_tts_events(self, event, hovered_element):
         """
         TODO: docs
+
+        Call i18n to perform the translation, but this isn't perfect when the buttons
+        are represented by icons or contain special characters. This would be resolved
+        by alt text, but i18n makes this more complicated.
         """
         if self.engine is None or hovered_element is None:
             return
 
-        # Call i18n to perform the translation, but this isn't perfect when the buttons
-        # are represented by icons or contain special characters. This would be resolved
-        # by alt text, but i18n makes this more complicated.
+        print(hovered_element)
         if isinstance(hovered_element, CatButton):
-            self.engine.say(i18n.t(hovered_element.cat_id))
+            if hovered_element.text:
+                t = i18n.t(hovered_element.text, **hovered_element.text_kwargs)
+                self.engine.say(i18n.t(hovered_element.text, **hovered_element.text_kwargs))
+            elif (cat_id := hovered_element.return_cat_id()) is not None:
+                self.engine.say(cat_id)
+            elif (cat_object := hovered_element.return_cat_object()) is not None:
+                self.engine.say(str(cat_object.name))
         elif isinstance(hovered_element, UIButton) or isinstance(hovered_element, UILabel):
+            t = i18n.t(hovered_element.text, **hovered_element.text_kwargs)
+            print(t)
             self.engine.say(i18n.t(hovered_element.text, **hovered_element.text_kwargs))
         elif isinstance(hovered_element, UITextBox):
             parser.feed(hovered_element.html_text)
             text = parser.flush_text()
+            t = i18n.t(text, **hovered_element.text_kwargs)
+            print(t)
             self.engine.say(i18n.t(text, **hovered_element.text_kwargs))

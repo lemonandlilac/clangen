@@ -962,3 +962,42 @@ class ChooseAdoptiveParentScreen(Screens):
                 return True
 
         return False
+
+    def get_hovered_tts_element(self, mouse_x, mouse_y):
+        # Attributes which represent a readable single UI element
+        for element in [
+            self.next_cat_button,
+            self.previous_cat_button,
+            self.back_button,
+            self.toggle_adoptive_parent,
+            self.info,
+            self.help_button,
+            self.adoptive_parents_tab_button,
+            self.birth_parents_tab_button,
+            self.potential_parents_tab_button,
+            self.mates_current_parents_text,
+            self.adoptive_page_display,
+            self.potential_page_display,
+        ]:
+            if (
+                element is not None
+                and element.visible
+                and element.hover_point(mouse_x, mouse_y)
+            ):
+                return element
+
+        # Attributes which represent dictionaries of readable UI elements
+        for element_dict in [
+            self.checkboxes,
+            self.current_cat_elements,
+            self.selected_cat_elements,
+            self.birth_parents_buttons,
+            self.adoptive_parents_buttons,
+            self.potential_parents_buttons,
+            self.tab_buttons,
+        ]:
+            for _, element in element_dict.items():
+                if element.visible and element.hover_point(mouse_x, mouse_y):
+                    return element
+
+        return super().get_hovered_tts_element(mouse_x, mouse_y)

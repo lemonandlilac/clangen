@@ -272,7 +272,7 @@ while 1:
         controller_manager.process_event(event)
         keyboard_manager.process_event(event)
 
-    if not game.audio.tts.get_busy():
+    if not game.audio.disabled and not game.audio.muted and not game.audio.tts.get_busy():
         game.audio.tts.say_next()
 
     MANAGER.update(time_delta)
