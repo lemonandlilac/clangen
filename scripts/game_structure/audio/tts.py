@@ -91,22 +91,16 @@ class TTS:
         if self.engine is None or hovered_element is None:
             return
 
-        print(hovered_element)
         if isinstance(hovered_element, CatButton):
             if hovered_element.text:
-                t = i18n.t(hovered_element.text, **hovered_element.text_kwargs)
                 self.engine.say(i18n.t(hovered_element.text, **hovered_element.text_kwargs))
             elif (cat_id := hovered_element.return_cat_id()) is not None:
                 self.engine.say(cat_id)
             elif (cat_object := hovered_element.return_cat_object()) is not None:
                 self.engine.say(str(cat_object.name))
         elif isinstance(hovered_element, UIButton) or isinstance(hovered_element, UILabel):
-            t = i18n.t(hovered_element.text, **hovered_element.text_kwargs)
-            print(t)
             self.engine.say(i18n.t(hovered_element.text, **hovered_element.text_kwargs))
         elif isinstance(hovered_element, UITextBox):
             parser.feed(hovered_element.html_text)
             text = parser.flush_text()
-            t = i18n.t(text, **hovered_element.text_kwargs)
-            print(t)
             self.engine.say(i18n.t(text, **hovered_element.text_kwargs))

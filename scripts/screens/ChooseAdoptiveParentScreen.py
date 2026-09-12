@@ -963,7 +963,7 @@ class ChooseAdoptiveParentScreen(Screens):
 
         return False
 
-    def get_hovered_tts_element(self, mouse_x, mouse_y):
+    def get_hovered_tts_element(self):
         # Attributes which represent a readable single UI element
         for element in [
             self.next_cat_button,
@@ -982,7 +982,7 @@ class ChooseAdoptiveParentScreen(Screens):
             if (
                 element is not None
                 and element.visible
-                and element.hover_point(mouse_x, mouse_y)
+                and element.hovered
             ):
                 return element
 
@@ -997,7 +997,7 @@ class ChooseAdoptiveParentScreen(Screens):
             self.tab_buttons,
         ]:
             for _, element in element_dict.items():
-                if element.visible and element.hover_point(mouse_x, mouse_y):
+                if element.visible and element.hovered:
                     return element
 
-        return super().get_hovered_tts_element(mouse_x, mouse_y)
+        return super().get_hovered_tts_element()

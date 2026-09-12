@@ -725,9 +725,13 @@ class Screens:
             for x in range(0, len(list_to_chunk), items_allowed_in_chunk)
         ]
 
-    def get_hovered_tts_element(self, mouse_x, mouse_y) -> Optional[UIElement]:
+    def get_hovered_tts_element(self) -> Optional[UIElement]:
+        """
+        Determine if the mouse is hovering over a UI element on this screen.
+        :return: The UI element under the mouse, or None
+        """
         for _, button in self.menu_buttons.items():
-            if button.visible and button.hover_point(mouse_x, mouse_y):
+            if button.visible and button.hovered:
                 return button
 
         return None

@@ -78,15 +78,15 @@ class ChangeGenderScreen(Screens):
                     self.the_cat.assign_thought()
                     self.selected_cat_elements["identity_changed"].show()
                     self.selected_cat_elements["cat_gender"].kill()
-                    self.selected_cat_elements[
-                        "cat_gender"
-                    ] = pygame_gui.elements.UITextBox(
-                        self.the_cat.genderalign_string,
-                        ui_scale(pygame.Rect((126, 250), (250, 250))),
-                        object_id=get_text_box_theme(
-                            "#text_box_30_horizcenter_spacing_95"
-                        ),
-                        manager=MANAGER,
+                    self.selected_cat_elements["cat_gender"] = (
+                        pygame_gui.elements.UITextBox(
+                            self.the_cat.genderalign_string,
+                            ui_scale(pygame.Rect((126, 250), (250, 250))),
+                            object_id=get_text_box_theme(
+                                "#text_box_30_horizcenter_spacing_95"
+                            ),
+                            manager=MANAGER,
+                        )
                     )
 
             elif event.ui_element == self.buttons["add_pronouns"]:
@@ -296,18 +296,18 @@ class ChangeGenderScreen(Screens):
         )
 
         # List the various pronouns
-        self.removalboxes_text[
-            "container_general"
-        ] = pygame_gui.elements.UIScrollingContainer(
-            ui_scale(pygame.Rect((0, 5), (337, 270))),
-            object_id=get_text_box_theme("#text_box_30_horizleft_pad_0_8"),
-            manager=MANAGER,
-            allow_scroll_x=False,
-            container=self.current_container,
-            anchors={
-                "centerx": "centerx",
-                "top_target": self.removalboxes_text["instr"],
-            },
+        self.removalboxes_text["container_general"] = (
+            pygame_gui.elements.UIScrollingContainer(
+                ui_scale(pygame.Rect((0, 5), (337, 270))),
+                object_id=get_text_box_theme("#text_box_30_horizleft_pad_0_8"),
+                manager=MANAGER,
+                allow_scroll_x=False,
+                container=self.current_container,
+                anchors={
+                    "centerx": "centerx",
+                    "top_target": self.removalboxes_text["instr"],
+                },
+            )
         )
         pronoun_frame = "resources/images/pronoun_frame.png"
         n = 0
@@ -331,11 +331,11 @@ class ChangeGenderScreen(Screens):
                 ),
                 margins={"left": 0, "right": 0, "top": ui_scale_value(2), "bottom": 0},
             )
-            self.elements[
-                f"cat_pronouns_{n}"
-            ].background_image = pygame.transform.scale(
-                pygame.image.load(pronoun_frame).convert_alpha(),
-                ui_scale_dimensions((272, 44)),
+            self.elements[f"cat_pronouns_{n}"].background_image = (
+                pygame.transform.scale(
+                    pygame.image.load(pronoun_frame).convert_alpha(),
+                    ui_scale_dimensions((272, 44)),
+                )
             )
             self.elements[f"cat_pronouns_{n}"].rebuild()
 
@@ -400,18 +400,18 @@ class ChangeGenderScreen(Screens):
             anchors={"centerx": "centerx"},
         )
         # List the various pronouns
-        self.removalboxes_text[
-            "container_general2"
-        ] = pygame_gui.elements.UIScrollingContainer(
-            relative_rect=ui_scale(pygame.Rect((0, 5), (337, 270))),
-            object_id=get_text_box_theme("#text_box_30_horizleft_pad_0_8"),
-            manager=MANAGER,
-            allow_scroll_x=False,
-            container=self.saved_container,
-            anchors={
-                "centerx": "centerx",
-                "top_target": self.removalboxes_text["instr2"],
-            },
+        self.removalboxes_text["container_general2"] = (
+            pygame_gui.elements.UIScrollingContainer(
+                relative_rect=ui_scale(pygame.Rect((0, 5), (337, 270))),
+                object_id=get_text_box_theme("#text_box_30_horizleft_pad_0_8"),
+                manager=MANAGER,
+                allow_scroll_x=False,
+                container=self.saved_container,
+                anchors={
+                    "centerx": "centerx",
+                    "top_target": self.removalboxes_text["instr2"],
+                },
+            )
         )
 
         n = 0
@@ -572,39 +572,32 @@ class ChangeGenderScreen(Screens):
         self.saved_container.kill()
         self.reset_buttons_and_boxes()
 
-    def get_hovered_tts_element(self, mouse_x, mouse_y):
-        if self.back_button is not None and self.back_button.visible and self.back_button.hover_point(mouse_x, mouse_y):
-            return self.back_button
+    def get_hovered_tts_element(self):
+        # Attributes which represent a readable single UI element
+        for element in [
+            self.back_button,
+            self.next_cat_button,
+            self.previous_cat_button,
+        ]:
+            if element is not None and element.visible and element.hovered:
+                return element
 
-        if self.next_cat_button is not None and self.next_cat_button.visible and self.next_cat_button.hover_point(mouse_x, mouse_y):
-            return self.next_cat_button
+        # Attributes which represent dictionaries of readable UI elements
+        for element_dict in [
+            self.buttons,
+            self.selected_cat_elements,
+            self.addbuttons,
+            # Ignore the containers in this dictionary. We only care about text boxes.
+            {
+                k: v
+                for k, v in self.removalboxes_text.items()
+                if not isinstance(v, pygame_gui.elements.UIScrollingContainer)
+            },
+            self.removalbuttons,
+            self.deletebuttons,
+        ]:
+            for _, element in element_dict.items():
+                if element.visible and element.hovered:
+                    return element
 
-        if self.previous_cat_button is not None and self.previous_cat_button.visible and self.previous_cat_button.hover_point(mouse_x, mouse_y):
-            return self.previous_cat_button
-
-        for _, button in self.buttons.items():
-            if button.visible and button.hover_point(mouse_x, mouse_y):
-                return button
-
-        for _, selected_cat_elements in self.selected_cat_elements.items():
-            if selected_cat_elements.visible and selected_cat_elements.hover_point(mouse_x, mouse_y):
-                return selected_cat_elements
-
-        for _, addbuttons in self.addbuttons.items():
-            if addbuttons.visible and addbuttons.hover_point(mouse_x, mouse_y):
-                return addbuttons
-
-        for _, removalboxes_text in self.removalboxes_text.items():
-            if isinstance(removalboxes_text, pygame_gui.elements.UIScrollingContainer): continue
-            if removalboxes_text.visible and removalboxes_text.hover_point(mouse_x, mouse_y):
-                return removalboxes_text
-
-        for _, removalbuttons in self.removalbuttons.items():
-            if removalbuttons.visible and removalbuttons.hover_point(mouse_x, mouse_y):
-                return removalbuttons
-
-        for _, deletebuttons in self.deletebuttons.items():
-            if deletebuttons.visible and deletebuttons.hover_point(mouse_x, mouse_y):
-                return deletebuttons
-
-        return super().get_hovered_tts_element(mouse_x, mouse_y)
+        return super().get_hovered_tts_element()
