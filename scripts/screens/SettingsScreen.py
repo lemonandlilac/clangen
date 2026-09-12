@@ -137,6 +137,7 @@ class SettingsScreen(Screens):
                 elif event.ui_element == self.volume_elements["sound_volume_slider"]:
                     self.update_sound_volume_indicator()
                     game.audio.sound.change_volume(event.value)
+                    game.audio.tts.change_volume(event.value)
                     self.settings_changed = True
                     self.update_save_button()
 
