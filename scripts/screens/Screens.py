@@ -232,7 +232,7 @@ class Screens:
             if self.current_focus:
                 self.current_focus.unfocus()
 
-        elif event.type == INPUT_ACTION_PRESSED:
+        elif event.type == INPUT_ACTION_PRESSED and event.action != Action.SPEAK:
             switch_set_value(Switch.keybinds_live, True)
 
         # keybind handling
@@ -724,3 +724,10 @@ class Screens:
             list_to_chunk[x : x + items_allowed_in_chunk]
             for x in range(0, len(list_to_chunk), items_allowed_in_chunk)
         ]
+
+    def get_hovered_tts_element(self, mouse_x, mouse_y) -> Optional[UIElement]:
+        for _, button in self.menu_buttons.items():
+            if button.visible and button.hover_point(mouse_x, mouse_y):
+                return button
+
+        return None

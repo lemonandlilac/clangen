@@ -1,12 +1,30 @@
+from html.parser import HTMLParser
 import logging
 from typing import Optional
 
+import i18n
+
+from pygame_gui.elements import UIButton, UILabel, UITextBox
 import pyttsx3
 
 from scripts.game_structure.game.settings import game_setting_get, game_setting_set
 
 logger = logging.getLogger(__name__)
 
+class TTSParser(HTMLParser):
+    def __init__(self, *kwargs):
+        self.text = []
+        super().__init__(*kwargs)
+
+    def handle_data(self, data):
+        self.text.append(data)
+
+    def flush_text(self):
+        result = "".join(self.text)
+        self.text = []
+        return result
+
+parser = TTSParser()
 
 class TTS:
     def __init__(self):
@@ -31,16 +49,6 @@ class TTS:
 
         self.engine.isBusy()
 
-    def queue_text(self, text):
-        """
-        Queues the given text to pass to the TTS engine.
-        :param text: The text to read aloud
-        """
-        if self.engine is None:
-            return
-
-        self.engine.say(text)
-
     def say_next(self):
         """
         Says the next queued text in the TTS engine.
@@ -64,3 +72,19 @@ class TTS:
         # convert to a float and change volume accordingly
         self.volume = new_volume / 100
         game_setting_set("sound_volume", new_volume)
+
+    def handle_tts_events(self, event, hovered_element):
+        """
+        TODO: docs
+        """
+        if self.engine is None or hovered_element is None:
+            return
+
+        # Call i18n to perform the translation, but this isn't perfect when the buttons
+        # are represented by icons or contain special characters. This would be resolved
+        # by alt text, but i18n makes this more complicated.
+        if isinstance(hovered_element, UIButton) or isinstance(hovered_element, UILabel):
+            self.engine.say(i18n.t(hovered_element.text))
+        if isinstance(hovered_element, UITextBox):
+            parser.feed(hovered_element.html_text)
+            self.engine.say(i18n.t(parser.flush_text()))
