@@ -476,4 +476,4 @@ class StartScreen(Screens):
             if button.visible and button.hover_point(mouse_x, mouse_y):
                 return button
 
-        return None
+        return super().get_hovered_tts_element(mouse_x, mouse_y)

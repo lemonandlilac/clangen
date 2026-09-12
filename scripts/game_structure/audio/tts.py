@@ -80,11 +80,11 @@ class TTS:
         if self.engine is None or hovered_element is None:
             return
 
-        # Call i18n to perform the translation, but this isn't perfect when the buttons
-        # are represented by icons or contain special characters. This would be resolved
-        # by alt text, but i18n makes this more complicated.
         if isinstance(hovered_element, UIButton) or isinstance(hovered_element, UILabel):
+            # Call i18n to perform the translation, but this isn't perfect when the buttons
+            # are represented by icons or contain special characters. This would be resolved
+            # by alt text, but i18n makes this more complicated.
             self.engine.say(i18n.t(hovered_element.text))
         if isinstance(hovered_element, UITextBox):
-            parser.feed(hovered_element.html_text)
-            self.engine.say(i18n.t(parser.flush_text()))
+            # HACK: It's not ideal to extract the plaintext out of the text box like this.
+            self.engine.say(hovered_element.text_box_layout.plain_text)
