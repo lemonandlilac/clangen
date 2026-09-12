@@ -571,3 +571,40 @@ class ChangeGenderScreen(Screens):
         self.current_container.kill()
         self.saved_container.kill()
         self.reset_buttons_and_boxes()
+
+    def get_hovered_tts_element(self, mouse_x, mouse_y):
+        if self.back_button is not None and self.back_button.visible and self.back_button.hover_point(mouse_x, mouse_y):
+            return self.back_button
+
+        if self.next_cat_button is not None and self.next_cat_button.visible and self.next_cat_button.hover_point(mouse_x, mouse_y):
+            return self.next_cat_button
+
+        if self.previous_cat_button is not None and self.previous_cat_button.visible and self.previous_cat_button.hover_point(mouse_x, mouse_y):
+            return self.previous_cat_button
+
+        for _, button in self.buttons.items():
+            if button.visible and button.hover_point(mouse_x, mouse_y):
+                return button
+
+        for _, selected_cat_elements in self.selected_cat_elements.items():
+            if selected_cat_elements.visible and selected_cat_elements.hover_point(mouse_x, mouse_y):
+                return selected_cat_elements
+
+        for _, addbuttons in self.addbuttons.items():
+            if addbuttons.visible and addbuttons.hover_point(mouse_x, mouse_y):
+                return addbuttons
+
+        for _, removalboxes_text in self.removalboxes_text.items():
+            if isinstance(removalboxes_text, pygame_gui.elements.UIScrollingContainer): continue
+            if removalboxes_text.visible and removalboxes_text.hover_point(mouse_x, mouse_y):
+                return removalboxes_text
+
+        for _, removalbuttons in self.removalbuttons.items():
+            if removalbuttons.visible and removalbuttons.hover_point(mouse_x, mouse_y):
+                return removalbuttons
+
+        for _, deletebuttons in self.deletebuttons.items():
+            if deletebuttons.visible and deletebuttons.hover_point(mouse_x, mouse_y):
+                return deletebuttons
+
+        return super().get_hovered_tts_element(mouse_x, mouse_y)
