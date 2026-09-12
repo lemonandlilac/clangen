@@ -216,10 +216,9 @@ while 1:
                 # Determine if any readable UI element is being hovered over.
                 # The pygame_gui events are not broad enough to handle all possible elements
                 # that could be read out, so this needs to be done manually.
-                mouse_x, mouse_y = MANAGER.calculate_scaled_mouse_position(pygame.mouse.get_pos())
                 hovered_element = all_screens.get_screen(
                     game.current_screen.replace(" ", "_"
-                )).get_hovered_tts_element(mouse_x, mouse_y)
+                )).get_hovered_tts_element()
                 game.audio.tts.handle_tts_events(event, hovered_element)
 
         if event.type == pygame.QUIT:
