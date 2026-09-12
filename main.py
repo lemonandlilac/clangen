@@ -8,6 +8,7 @@ import threading
 
 import pygame
 
+from scripts.game_input.action import Action
 import scripts.game_structure.screen_settings
 from scripts.cat.sprites.load_sprites import sprites
 from scripts.clan import Afterlife, clan_class
@@ -210,6 +211,16 @@ while 1:
 
         if not game.audio.disabled and not game.audio.muted:
             game.audio.sound.handle_sound_events(event)
+
+            if event.type == INPUT_ACTION_PRESSED and event.action == Action.SPEAK:
+                # Determine if any readable UI element is being hovered over.
+                # The pygame_gui events are not broad enough to handle all possible elements
+                # that could be read out, so this needs to be done manually.
+                mouse_x, mouse_y = MANAGER.calculate_scaled_mouse_position(pygame.mouse.get_pos())
+                hovered_element = all_screens.get_screen(
+                    game.current_screen.replace(" ", "_"
+                )).get_hovered_tts_element(mouse_x, mouse_y)
+                game.audio.tts.handle_tts_events(event, hovered_element)
 
         if event.type == pygame.QUIT:
             # Don't display if on the start screen or there is no clan.

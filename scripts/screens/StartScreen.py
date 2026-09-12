@@ -17,10 +17,11 @@ import platform
 import subprocess
 import traceback
 from html import escape
+from typing import Optional
 
 import pygame
 import pygame_gui
-from pygame_gui.core import ObjectID
+from pygame_gui.core import ObjectID, UIElement
 from requests.exceptions import RequestException, Timeout
 
 from scripts.cat.cats import Cat
@@ -462,3 +463,17 @@ class StartScreen(Screens):
 
         # LOAD settings
         game_settings_load()
+
+    def get_hovered_tts_element(self, mouse_x, mouse_y) -> Optional[UIElement]:
+        if self.warning_label is not None and self.warning_label.visible and self.warning_label.hover_point(mouse_x, mouse_y):
+            return self.warning_label
+
+        for _, button in self.elements.items():
+            if button.visible and button.hover_point(mouse_x, mouse_y):
+                return button
+
+        for _, button in self.social_buttons.items():
+            if button.visible and button.hover_point(mouse_x, mouse_y):
+                return button
+
+        return None
