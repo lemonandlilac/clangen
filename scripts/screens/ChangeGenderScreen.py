@@ -572,14 +572,14 @@ class ChangeGenderScreen(Screens):
         self.saved_container.kill()
         self.reset_buttons_and_boxes()
 
-    def get_hovered_tts_element(self):
+    def get_hovered_tts_element(self, mouse_x, mouse_y):
         # Attributes which represent a readable single UI element
         for element in [
             self.back_button,
             self.next_cat_button,
             self.previous_cat_button,
         ]:
-            if element is not None and element.visible and element.hovered:
+            if element is not None and element.visible and element.hover_point(mouse_x, mouse_y):
                 return element
 
         # Attributes which represent dictionaries of readable UI elements
@@ -597,7 +597,7 @@ class ChangeGenderScreen(Screens):
             self.deletebuttons,
         ]:
             for _, element in element_dict.items():
-                if element.visible and element.hovered:
+                if element.visible and element.hover_point(mouse_x, mouse_y):
                     return element
 
-        return super().get_hovered_tts_element()
+        return super().get_hovered_tts_element(mouse_x, mouse_y)

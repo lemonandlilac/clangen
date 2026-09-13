@@ -7612,3 +7612,9 @@ class EventEditScreen(Screens):
         )
         self.valid_id()
         self.create_divider(self.event_id_element["text"], "event_id")
+
+    def get_hovered_tts_element(self, mouse_x, mouse_y):
+        # I'm sorry, this is a no-op. I don't know enough about this screen to
+        # add support here.
+        return super().get_hovered_tts_element(mouse_x, mouse_y)
+

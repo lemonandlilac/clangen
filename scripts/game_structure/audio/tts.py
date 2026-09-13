@@ -10,6 +10,7 @@ from scripts.game_structure.game.settings import game_setting_get, game_setting_
 from scripts.game_structure.monkeypatch import translate
 from scripts.ui.elements.cat_button import CatButton
 from scripts.ui.elements.checkbox import UICheckbox
+from scripts.ui.elements.id_image_button import IDImageButton
 from scripts.ui.elements.save_button import UISaveButton
 from scripts.ui.elements.sprite_button import UISpriteButton
 
@@ -110,6 +111,8 @@ class TTS:
                 self.engine.say(str(cat_object.name))
         elif isinstance(hovered_element, UICheckbox):
             self.engine.say(translate(hovered_element.tool_tip_text, **hovered_element.tool_tip_text_kwargs))
+        elif isinstance(hovered_element, IDImageButton):
+            self.engine.say("Involved cats")
         elif isinstance(hovered_element, UIButton) or isinstance(hovered_element, UILabel):
             self.engine.say(translate(hovered_element.text, **hovered_element.text_kwargs))
         elif isinstance(hovered_element, UITextBox):
