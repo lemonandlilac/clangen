@@ -4,6 +4,7 @@ import i18n
 import pygame
 import pygame_gui
 from pygame_gui.core import UIContainer
+from pygame_gui.elements import UIImage
 
 from scripts.cat.cats import Cat
 from scripts.cat.enums import CatRank, CatGroup, CatStanding
@@ -1194,3 +1195,36 @@ class LeaderDenScreen(Screens):
                 "success": success,
             },
         )
+
+    def get_hovered_tts_element(self, mouse_x, mouse_y):
+        # Attributes which represent a readable single UI element
+        for element in [
+            self.help_button,
+            self.back_button,
+        ]:
+            if (
+                element is not None
+                and element.visible
+                and element.hover_point(mouse_x, mouse_y)
+            ):
+                return element
+
+        # Attributes which represent dictionaries of readable UI elements
+        for element_dict in [
+            self.screen_elements,
+            self.focus_frame_elements,
+            self.focus_outsider_elements,
+            self.focus_button,
+            self.other_clan_selection_elements,
+            self.outsider_selection_elements,
+            self.outsider_cat_buttons,
+        ]:
+            for _, element in element_dict.items():
+                if (
+                    not isinstance(element, UIImage)
+                    and element.visible
+                    and element.hover_point(mouse_x, mouse_y)
+                ):
+                    return element
+
+        return super().get_hovered_tts_element(mouse_x, mouse_y)

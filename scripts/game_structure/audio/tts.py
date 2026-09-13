@@ -114,7 +114,10 @@ class TTS:
         elif isinstance(hovered_element, IDImageButton):
             self.engine.say("Involved cats")
         elif isinstance(hovered_element, UIButton) or isinstance(hovered_element, UILabel):
-            self.engine.say(translate(hovered_element.text, **hovered_element.text_kwargs))
+            if hovered_element.text:
+                self.engine.say(translate(hovered_element.text, **hovered_element.text_kwargs))
+            elif hovered_element.tool_tip_text:
+                self.engine.say(translate(hovered_element.tool_tip_text, **hovered_element.tool_tip_text_kwargs))
         elif isinstance(hovered_element, UITextBox):
             # Feed it to a custom HTML parser to strip all formatting
             feed_input = translate(hovered_element.html_text, **hovered_element.text_kwargs)
