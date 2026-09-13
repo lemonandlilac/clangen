@@ -464,3 +464,29 @@ class ClanSettingsScreen(Screens):
         TODO: DOCS
         """
         super().on_use()
+
+    def get_hovered_tts_element(self):
+        # Attributes which represent a readable single UI element
+        for element in [
+            self.general_settings_button,
+            self.relation_settings_button,
+            self.role_settings_button,
+            self.clan_stats_button,
+        ]:
+            if element is not None and element.visible and element.hovered:
+                return element
+
+        # Attributes which represent dictionaries of readable UI elements
+        for element_dict in [
+            self.checkboxes,
+            {
+                k: v
+                for k, v in self.checkboxes_text.items()
+                if not isinstance(v, UIModifiedScrollingContainer)
+            },
+        ]:
+            for _, element in element_dict.items():
+                if element.visible and element.hovered:
+                    return element
+
+        return super().get_hovered_tts_element()

@@ -488,3 +488,26 @@ class ClanScreen(Screens):
         else:
             for ele in self.camp_labels:
                 self.camp_labels[ele].hide()
+
+    def get_hovered_tts_element(self):
+        # Attributes which represent a readable single UI element
+        for element in [
+            self.show_den_labels_text,
+            self.label_toggle,
+            # HACK: The save button is a wrapper around three internal buttons, only one of which should be visible at once.
+            self.save_button.unsaved_state,
+            self.save_button.saving_state,
+            self.save_button.saved_state,
+        ]:
+            if element is not None and element.visible and element.hovered:
+                return element
+
+        for _, element in self.camp_labels.items():
+            if element.visible and element.hovered:
+                return element
+
+        for element in self.cat_buttons:
+            if element.visible and element.hovered:
+                return element
+
+        return super().get_hovered_tts_element()
