@@ -1180,3 +1180,41 @@ class ChooseMateScreen(Screens):
         ]
 
         return valid_mates
+
+    def get_hovered_tts_element(self):
+        # Attributes which represent a readable single UI element
+        for element in [
+            self.next_cat_button,
+            self.previous_cat_button,
+            self.back_button,
+            self.info,
+            self.toggle_mate,
+            self.mates_tab_button,
+            self.offspring_tab_button,
+            self.potential_mates_button,
+            self.single_only_text,
+            self.have_kits_text,
+            self.with_selected_cat_text,
+            self.potential_page_display,
+            self.offspring_page_display,
+            self.mate_page_display,
+            self.no_kits_message,
+        ]:
+            if element is not None and element.visible and element.hovered:
+                return element
+
+        # Attributes which represent dictionaries of readable UI elements
+        for element_dict in [
+            self.checkboxes,
+            self.current_cat_elements,
+            self.selected_cat_elements,
+            self.mates_cat_buttons,
+            self.offspring_cat_buttons,
+            self.potential_mates_buttons,
+            self.tab_buttons,
+        ]:
+            for _, element in element_dict.items():
+                if element.visible and element.hovered:
+                    return element
+
+        return super().get_hovered_tts_element()
