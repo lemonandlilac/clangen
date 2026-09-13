@@ -5,9 +5,13 @@ from typing import Optional
 from pygame_gui.elements import UIButton, UILabel, UITextBox
 import pyttsx3
 
+from scripts.cat.cats import Cat
 from scripts.game_structure.game.settings import game_setting_get, game_setting_set
 from scripts.game_structure.monkeypatch import translate
 from scripts.ui.elements.cat_button import CatButton
+from scripts.ui.elements.checkbox import UICheckbox
+from scripts.ui.elements.save_button import UISaveButton
+from scripts.ui.elements.sprite_button import UISpriteButton
 
 logger = logging.getLogger(__name__)
 
@@ -90,13 +94,22 @@ class TTS:
         if self.engine is None or hovered_element is None:
             return
 
-        if isinstance(hovered_element, CatButton):
+        # The order and elifs matter, because isinstance checks subclasses.
+        if isinstance(hovered_element, UISpriteButton):
+            if (cat_object := hovered_element.return_cat_object()) is not None:
+                self.engine.say(str(cat_object.name))
+            elif (cat_id := hovered_element.return_cat_id()) is not None:
+                if (cat := Cat.all_cats.get(cat_id)) is not None:
+                    self.engine.say(str(cat.name))
+        elif isinstance(hovered_element, CatButton):
             if hovered_element.text:
                 self.engine.say(translate(hovered_element.text, **hovered_element.text_kwargs))
             elif (cat_id := hovered_element.return_cat_id()) is not None:
                 self.engine.say(cat_id)
             elif (cat_object := hovered_element.return_cat_object()) is not None:
                 self.engine.say(str(cat_object.name))
+        elif isinstance(hovered_element, UICheckbox):
+            self.engine.say(translate(hovered_element.tool_tip_text, **hovered_element.tool_tip_text_kwargs))
         elif isinstance(hovered_element, UIButton) or isinstance(hovered_element, UILabel):
             self.engine.say(translate(hovered_element.text, **hovered_element.text_kwargs))
         elif isinstance(hovered_element, UITextBox):
