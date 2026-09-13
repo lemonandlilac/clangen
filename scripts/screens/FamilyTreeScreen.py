@@ -667,3 +667,42 @@ class FamilyTreeScreen(Screens):
         del self.next_group_page
         self.previous_group_page.kill()
         del self.previous_group_page
+
+    def get_hovered_tts_element(self, mouse_x, mouse_y):
+        # Attributes which represent a readable single UI element
+        for element in [
+            self.next_group_page,
+            self.previous_group_page,
+            self.grandkits_button,
+            self.kits_mates_button,
+            self.kits_button,
+            self.mates_button,
+            self.sibling_kits_button,
+            self.sibling_mates_button,
+            self.siblings_button,
+            self.cousins_button,
+            self.parents_siblings_button,
+            self.parents_button,
+            self.grandparents_button,
+            self.back_button,
+            self.next_cat_button,
+            self.previous_cat_button,
+        ]:
+            if (
+                element is not None
+                and element.visible
+                and element.hover_point(mouse_x, mouse_y)
+            ):
+                return element
+
+        # Attributes which represent dictionaries of readable UI elements
+        for element_dict in [
+            self.cat_elements,
+            self.relation_elements,
+            self.tabs,
+        ]:
+            for _, element in element_dict.items():
+                if element.visible and element.hover_point(mouse_x, mouse_y):
+                    return element
+
+        return super().get_hovered_tts_element(mouse_x, mouse_y)
