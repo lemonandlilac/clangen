@@ -2,12 +2,11 @@ from html.parser import HTMLParser
 import logging
 from typing import Optional
 
-import i18n
-
 from pygame_gui.elements import UIButton, UILabel, UITextBox
 import pyttsx3
 
 from scripts.game_structure.game.settings import game_setting_get, game_setting_set
+from scripts.game_structure.monkeypatch import translate
 from scripts.ui.elements.cat_button import CatButton
 
 logger = logging.getLogger(__name__)
@@ -93,14 +92,16 @@ class TTS:
 
         if isinstance(hovered_element, CatButton):
             if hovered_element.text:
-                self.engine.say(i18n.t(hovered_element.text, **hovered_element.text_kwargs))
+                self.engine.say(translate(hovered_element.text, **hovered_element.text_kwargs))
             elif (cat_id := hovered_element.return_cat_id()) is not None:
                 self.engine.say(cat_id)
             elif (cat_object := hovered_element.return_cat_object()) is not None:
                 self.engine.say(str(cat_object.name))
         elif isinstance(hovered_element, UIButton) or isinstance(hovered_element, UILabel):
-            self.engine.say(i18n.t(hovered_element.text, **hovered_element.text_kwargs))
+            self.engine.say(translate(hovered_element.text, **hovered_element.text_kwargs))
         elif isinstance(hovered_element, UITextBox):
-            parser.feed(hovered_element.html_text)
-            text = parser.flush_text()
-            self.engine.say(i18n.t(text, **hovered_element.text_kwargs))
+            # Feed it to a custom HTML parser to strip all formatting
+            feed_input = translate(hovered_element.html_text, **hovered_element.text_kwargs)
+            parser.feed(feed_input)
+            output = parser.flush_text()
+            self.engine.say(output)
