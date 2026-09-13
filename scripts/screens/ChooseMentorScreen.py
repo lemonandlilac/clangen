@@ -696,7 +696,7 @@ class ChooseMentorScreen(Screens):
         # Due to a bug in pygame, any image with buttons over it must be blitted
         super().on_use()
 
-    def get_hovered_tts_element(self):
+    def get_hovered_tts_element(self, mouse_x, mouse_y):
         # Attributes which represent a readable single UI element
         for element in [
             self.next_page_button,
@@ -714,7 +714,7 @@ class ChooseMentorScreen(Screens):
             self.no_current_app_text,
             self.no_former_app_text,
         ]:
-            if element is not None and element.visible and element.hovered:
+            if element is not None and element.visible and element.hover_point(mouse_x, mouse_y):
                 return element
 
         # Attributes which represent dictionaries of readable UI elements
@@ -725,7 +725,7 @@ class ChooseMentorScreen(Screens):
             self.cat_list_buttons,
         ]:
             for _, element in element_dict.items():
-                if element.visible and element.hovered:
+                if element.visible and element.hover_point(mouse_x, mouse_y):
                     return element
 
-        return super().get_hovered_tts_element()
+        return super().get_hovered_tts_element(mouse_x, mouse_y)

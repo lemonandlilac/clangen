@@ -465,7 +465,7 @@ class ClanSettingsScreen(Screens):
         """
         super().on_use()
 
-    def get_hovered_tts_element(self):
+    def get_hovered_tts_element(self, mouse_x, mouse_y):
         # Attributes which represent a readable single UI element
         for element in [
             self.general_settings_button,
@@ -473,7 +473,7 @@ class ClanSettingsScreen(Screens):
             self.role_settings_button,
             self.clan_stats_button,
         ]:
-            if element is not None and element.visible and element.hovered:
+            if element is not None and element.visible and element.hover_point(mouse_x, mouse_y):
                 return element
 
         # Attributes which represent dictionaries of readable UI elements
@@ -486,7 +486,7 @@ class ClanSettingsScreen(Screens):
             },
         ]:
             for _, element in element_dict.items():
-                if element.visible and element.hovered:
+                if element.visible and element.hover_point(mouse_x, mouse_y):
                     return element
 
-        return super().get_hovered_tts_element()
+        return super().get_hovered_tts_element(mouse_x, mouse_y)

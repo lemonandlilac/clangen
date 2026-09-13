@@ -285,19 +285,19 @@ class AllegiancesScreen(Screens):
 
         return outputs
 
-    def get_hovered_tts_element(self):
-        if self.heading is not None and self.heading.visible and self.heading.hovered:
+    def get_hovered_tts_element(self, mouse_x, mouse_y):
+        if self.heading is not None and self.heading.visible and self.heading.hover_point(mouse_x, mouse_y):
             return self.heading
 
         for rank_box in self.ranks_boxes:
-            if rank_box.visible and rank_box.hovered:
+            if rank_box.visible and rank_box.hover_point(mouse_x, mouse_y):
                 return rank_box
 
         # An unfortunate consequence of how the name boxes are rendered is that a single
         # box represents all the warriors in the Clan, so the TTS will read it out all
         # at once.
         for name_box in self.names_boxes:
-            if name_box.visible and name_box.hovered:
+            if name_box.visible and name_box.hover_point(mouse_x, mouse_y):
                 return name_box
 
-        return super().get_hovered_tts_element()
+        return super().get_hovered_tts_element(mouse_x, mouse_y)

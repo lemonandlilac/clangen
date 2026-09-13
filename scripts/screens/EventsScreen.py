@@ -997,3 +997,38 @@ class EventsScreen(Screens):
 
         self.update_events_display()
         self.timeskip_button.enable()
+
+    def get_hovered_tts_element(self, mouse_x, mouse_y):
+        # Attributes which represent a readable single UI element
+        for element in [
+            self.timeskip_button,
+            self.open_involved_cat_button,
+            # HACK: The save button is a wrapper around three internal buttons, only one of which should be visible at once.
+            self.save_button.unsaved_state,
+            self.save_button.saving_state,
+            self.save_button.saved_state,
+        ]:
+            if element is not None and element.visible and element.hover_point(mouse_x, mouse_y):
+                return element
+
+        # Attributes which represent lists of readable UI elements
+        for element_list in [
+            self.event_display_boxes,
+            self.cat_profile_buttons,
+            self.involved_cat_buttons,
+        ]:
+            for element in element_list:
+                if element.visible and element.hover_point(mouse_x, mouse_y):
+                    return element
+
+        # Attributes which represent dictionaries of readable UI elements
+        for element_dict in [
+            self.event_buttons,
+            self.page_control,
+            self.clan_info,
+        ]:
+            for _, element in element_dict.items():
+                if element.visible and element.hover_point(mouse_x, mouse_y):
+                    return element
+
+        return super().get_hovered_tts_element(mouse_x, mouse_y)

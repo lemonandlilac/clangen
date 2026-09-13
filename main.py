@@ -218,7 +218,7 @@ while 1:
                 # that could be read out, so this needs to be done manually.
                 hovered_element = all_screens.get_screen(
                     game.current_screen.replace(" ", "_"
-                )).get_hovered_tts_element()
+                )).get_hovered_tts_element(*pygame.mouse.get_pos())
                 game.audio.tts.handle_tts_events(event, hovered_element)
 
         if event.type == pygame.QUIT:
