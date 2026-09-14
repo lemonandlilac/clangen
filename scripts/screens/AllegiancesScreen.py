@@ -286,6 +286,9 @@ class AllegiancesScreen(Screens):
         return outputs
 
     def get_hovered_tts_element(self, mouse_x, mouse_y):
+        if result := super().get_hovered_tts_element(mouse_x, mouse_y):
+            return result
+
         if (
             self.heading is not None
             and self.heading.visible
@@ -312,4 +315,4 @@ class AllegiancesScreen(Screens):
             ):
                 return name_box
 
-        return super().get_hovered_tts_element(mouse_x, mouse_y)
+        return None

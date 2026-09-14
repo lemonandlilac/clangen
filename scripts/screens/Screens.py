@@ -709,13 +709,17 @@ class Screens:
         ):
             return
 
-        self.previous_cat_button.enable() if hasattr(
-            self, "previous_cat"
-        ) and self.previous_cat else self.previous_cat_button.disable()
+        (
+            self.previous_cat_button.enable()
+            if hasattr(self, "previous_cat") and self.previous_cat
+            else self.previous_cat_button.disable()
+        )
 
-        self.next_cat_button.enable() if hasattr(
-            self, "next_cat"
-        ) and self.next_cat else self.next_cat_button.disable()
+        (
+            self.next_cat_button.enable()
+            if hasattr(self, "next_cat") and self.next_cat
+            else self.next_cat_button.disable()
+        )
 
     # pragma pylint: enable=no-member
 
@@ -733,20 +737,26 @@ class Screens:
         :param mouse_y: The x-position of the mouse, used for determining if the mouse is over a UI element
         :return: The UI element under the mouse, or None
         """
+        # Handle UIDropdowns first, since they might overlap other buttons.
+        for dropdown in [
+            self.menu_buttons.get("supplies"),
+            self.menu_buttons.get("dens"),
+        ]:
+            if dropdown.parent_button.visible and dropdown.parent_button.hover_point(
+                mouse_x, mouse_y
+            ):
+                return dropdown.parent_button
+            for dropdown in dropdown.child_buttons:
+                if (
+                    dropdown is not None
+                    and dropdown.visible
+                    and dropdown.hover_point(mouse_x, mouse_y)
+                ):
+                    return dropdown
+
         for _, button in self.menu_buttons.items():
             if isinstance(button, UIDropDown):
-                if (
-                    button.parent_button.visible
-                    and button.parent_button.hover_point(mouse_x, mouse_y)
-                ):
-                    return button.parent_button
-                for button in button.child_buttons:
-                    if (
-                        button is not None
-                        and button.visible
-                        and button.hover_point(mouse_x, mouse_y)
-                    ):
-                        return button
+                continue
             if (
                 button is not None
                 and button.visible

@@ -490,6 +490,9 @@ class ClanScreen(Screens):
                 self.camp_labels[ele].hide()
 
     def get_hovered_tts_element(self, mouse_x, mouse_y):
+        if result := super().get_hovered_tts_element(mouse_x, mouse_y):
+            return result
+
         # Attributes which represent a readable single UI element
         for element in [
             self.show_den_labels_text,
@@ -522,4 +525,4 @@ class ClanScreen(Screens):
             ):
                 return element
 
-        return super().get_hovered_tts_element(mouse_x, mouse_y)
+        return None

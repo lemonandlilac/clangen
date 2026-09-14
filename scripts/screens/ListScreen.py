@@ -820,6 +820,10 @@ class ListScreen(Screens):
                 self.full_cat_list.append(the_cat)
 
     def get_hovered_tts_element(self, mouse_x, mouse_y):
+        if result := super().get_hovered_tts_element(mouse_x, mouse_y):
+            return result
+
+        # TODO: for some reason this button doesn't actually contain the text, and the message is actually stored in self.temper_message.text_box_layout.plain_text
         if (
             self.temper_message is not None
             and self.temper_message.visible
@@ -881,4 +885,4 @@ class ListScreen(Screens):
             ):
                 return cat_sprite
 
-        return super().get_hovered_tts_element(mouse_x, mouse_y)
+        return None

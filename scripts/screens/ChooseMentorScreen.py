@@ -697,6 +697,9 @@ class ChooseMentorScreen(Screens):
         super().on_use()
 
     def get_hovered_tts_element(self, mouse_x, mouse_y):
+        if result := super().get_hovered_tts_element(mouse_x, mouse_y):
+            return result
+
         # Attributes which represent a readable single UI element
         for element in [
             self.next_page_button,
@@ -732,4 +735,4 @@ class ChooseMentorScreen(Screens):
                 ):
                     return element
 
-        return super().get_hovered_tts_element(mouse_x, mouse_y)
+        return None

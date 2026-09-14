@@ -999,6 +999,9 @@ class EventsScreen(Screens):
         self.timeskip_button.enable()
 
     def get_hovered_tts_element(self, mouse_x, mouse_y):
+        if result := super().get_hovered_tts_element(mouse_x, mouse_y):
+            return result
+
         # Attributes which represent a readable single UI element
         for element in [
             self.timeskip_button,
@@ -1039,4 +1042,4 @@ class EventsScreen(Screens):
                 ):
                     return element
 
-        return super().get_hovered_tts_element(mouse_x, mouse_y)
+        return None

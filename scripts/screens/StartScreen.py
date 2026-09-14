@@ -465,6 +465,9 @@ class StartScreen(Screens):
         game_settings_load()
 
     def get_hovered_tts_element(self, mouse_x, mouse_y) -> Optional[UIElement]:
+        if result := super().get_hovered_tts_element(mouse_x, mouse_y):
+            return result
+
         if (
             self.warning_label is not None
             and self.warning_label.visible
@@ -488,4 +491,4 @@ class StartScreen(Screens):
             ):
                 return button
 
-        return super().get_hovered_tts_element(mouse_x, mouse_y)
+        return None

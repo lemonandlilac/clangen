@@ -1182,6 +1182,9 @@ class ChooseMateScreen(Screens):
         return valid_mates
 
     def get_hovered_tts_element(self, mouse_x, mouse_y):
+        if result := super().get_hovered_tts_element(mouse_x, mouse_y):
+            return result
+
         # Attributes which represent a readable single UI element
         for element in [
             self.next_cat_button,
@@ -1221,4 +1224,4 @@ class ChooseMateScreen(Screens):
                 ):
                     return element
 
-        return super().get_hovered_tts_element(mouse_x, mouse_y)
+        return None

@@ -107,6 +107,9 @@ class CeremonyScreen(Screens):
         return
 
     def get_hovered_tts_element(self, mouse_x, mouse_y):
+        if result := super().get_hovered_tts_element(mouse_x, mouse_y):
+            return result
+
         if self.back_button is not None and self.back_button.visible and self.back_button.hover_point(mouse_x, mouse_y):
             return self.back_button
 
@@ -116,4 +119,4 @@ class CeremonyScreen(Screens):
         if self.text is not None and self.text.visible and self.text.hover_point(mouse_x, mouse_y):
             return self.text
 
-        return super().get_hovered_tts_element(mouse_x, mouse_y)
+        return None
