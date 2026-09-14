@@ -27,6 +27,7 @@ from scripts.game_structure.screen_settings import (
 )
 from scripts.screens.screens_core.screens_core import rebuild_moon_n_season_indicator
 from scripts.ui import focus_matrix
+from scripts.ui.elements.dropdown import UIDropDown
 from scripts.ui.focus_matrix import _set_focus
 from scripts.ui.windows.freshkill import FreshkillManagementWindow
 from scripts.ui.windows.herbs import HerbManagementWindow
@@ -733,7 +734,24 @@ class Screens:
         :return: The UI element under the mouse, or None
         """
         for _, button in self.menu_buttons.items():
-            if button.visible and button.hover_point(mouse_x, mouse_y):
+            if isinstance(button, UIDropDown):
+                if (
+                    button.parent_button.visible
+                    and button.parent_button.hover_point(mouse_x, mouse_y)
+                ):
+                    return button.parent_button
+                for button in button.child_buttons:
+                    if (
+                        button is not None
+                        and button.visible
+                        and button.hover_point(mouse_x, mouse_y)
+                    ):
+                        return button
+            if (
+                button is not None
+                and button.visible
+                and button.hover_point(mouse_x, mouse_y)
+            ):
                 return button
 
         return None

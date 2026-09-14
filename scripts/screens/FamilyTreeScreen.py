@@ -702,7 +702,11 @@ class FamilyTreeScreen(Screens):
             self.tabs,
         ]:
             for _, element in element_dict.items():
-                if element.visible and element.hover_point(mouse_x, mouse_y):
+                if (
+                    element is not None
+                    and element.visible
+                    and element.hover_point(mouse_x, mouse_y)
+                ):
                     return element
 
         return super().get_hovered_tts_element(mouse_x, mouse_y)

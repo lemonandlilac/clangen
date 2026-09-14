@@ -818,3 +818,67 @@ class ListScreen(Screens):
                 and the_cat.status.is_near(CatGroup.PLAYER_CLAN_ID)
             ):
                 self.full_cat_list.append(the_cat)
+
+    def get_hovered_tts_element(self, mouse_x, mouse_y):
+        if (
+            self.temper_message is not None
+            and self.temper_message.visible
+            and self.temper_message.hover_point(mouse_x, mouse_y)
+        ):
+            return self.temper_message
+
+        # Dropdowns
+        if (
+            self.choose_group_dropdown.parent_button.visible
+            and self.choose_group_dropdown.parent_button.hover_point(mouse_x, mouse_y)
+        ):
+            return self.choose_group_dropdown.parent_button
+        for button in self.choose_group_dropdown.child_buttons:
+            if (
+                button is not None
+                and button.visible
+                and button.hover_point(mouse_x, mouse_y)
+            ):
+                return button
+
+        if (
+            self.sort_by_dropdown.parent_button.visible
+            and self.sort_by_dropdown.parent_button.hover_point(mouse_x, mouse_y)
+        ):
+            return self.sort_by_dropdown.parent_button
+        for button in self.sort_by_dropdown.child_buttons:
+            if (
+                button is not None
+                and button.visible
+                and button.hover_point(mouse_x, mouse_y)
+            ):
+                return button
+
+        # Attributes which represent dictionaries of readable UI elements
+        for element_dict in [
+            self.cat_list_bar_elements,
+            self.display_container_elements,
+        ]:
+            for _, element in element_dict.items():
+                if isinstance(
+                    element,
+                    (pygame_gui.elements.UIImage, pygame_gui.elements.UITextEntryLine),
+                ):
+                    continue
+                elif (
+                    element is not None
+                    and element.visible
+                    and element.hover_point(mouse_x, mouse_y)
+                ):
+                    return element
+
+        # Cat sprites need to be done last, because they might be under things like dropdowns
+        for _, cat_sprite in self.cat_display.cat_sprites.items():
+            if (
+                cat_sprite is not None
+                and cat_sprite.visible
+                and cat_sprite.hover_point(mouse_x, mouse_y)
+            ):
+                return cat_sprite
+
+        return super().get_hovered_tts_element(mouse_x, mouse_y)

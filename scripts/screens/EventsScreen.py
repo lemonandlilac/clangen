@@ -1018,7 +1018,11 @@ class EventsScreen(Screens):
             self.involved_cat_buttons,
         ]:
             for element in element_list:
-                if element.visible and element.hover_point(mouse_x, mouse_y):
+                if (
+                    element is not None
+                    and element.visible
+                    and element.hover_point(mouse_x, mouse_y)
+                ):
                     return element
 
         # Attributes which represent dictionaries of readable UI elements
@@ -1028,7 +1032,11 @@ class EventsScreen(Screens):
             self.clan_info,
         ]:
             for _, element in element_dict.items():
-                if element.visible and element.hover_point(mouse_x, mouse_y):
+                if (
+                    element is not None
+                    and element.visible
+                    and element.hover_point(mouse_x, mouse_y)
+                ):
                     return element
 
         return super().get_hovered_tts_element(mouse_x, mouse_y)

@@ -499,15 +499,27 @@ class ClanScreen(Screens):
             self.save_button.saving_state,
             self.save_button.saved_state,
         ]:
-            if element is not None and element.visible and element.hover_point(mouse_x, mouse_y):
+            if (
+                element is not None
+                and element.visible
+                and element.hover_point(mouse_x, mouse_y)
+            ):
                 return element
 
         for _, element in self.camp_labels.items():
-            if element.visible and element.hover_point(mouse_x, mouse_y):
+            if (
+                element is not None
+                and element.visible
+                and element.hover_point(mouse_x, mouse_y)
+            ):
                 return element
 
         for element in self.cat_buttons:
-            if element.visible and element.hover_point(mouse_x, mouse_y):
+            if (
+                element is not None
+                and element.visible
+                and element.hover_point(mouse_x, mouse_y)
+            ):
                 return element
 
         return super().get_hovered_tts_element(mouse_x, mouse_y)
